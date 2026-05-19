@@ -1,27 +1,29 @@
 export default {
   async fetch(request, env) {
+    // Definimos las reglas de "permiso"
     const corsHeaders = {
-      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Origin": "*", // Esto abre la puerta a todos
       "Access-Control-Allow-Methods": "POST, OPTIONS",
       "Access-Control-Allow-Headers": "Content-Type",
     };
 
-    // Responder a las solicitudes de verificación del navegador (CORS)
+    // 1. Responder a la pregunta de seguridad del navegador
     if (request.method === "OPTIONS") {
       return new Response(null, { headers: corsHeaders });
     }
 
-    // Si no es un POST, no hacemos nada
-    if (request.method !== "POST") {
-      return new Response(JSON.stringify({ message: "Servidor activo. Usa POST para login." }), { 
-        headers: { ...corsHeaders, "content-type": "application/json" } 
-      });
-    }
-
+    // 2. Intentar procesar el login
     try {
+      // Si no es POST, no permitimos la entrada
+      if (request.method !== "POST") {
+        return new Response(JSON.stringify({ error: "Solo permitimos POST" }), { 
+          status: 405, 
+          headers: { ...corsHeaders } 
+        });
+      }
+
       const { usuario, contrasena } = await request.json();
 
-      // Consulta a la base de datos D1 usando el binding 'DB'
       const { results } = await env.DB.prepare(
         "SELECT * FROM bd_usuarios WHERE usuario = ? AND contrasena = ?"
       )
@@ -38,7 +40,8 @@ export default {
         });
       }
     } catch (e) {
-      return new Response(JSON.stringify({ success: false, error: "Error en servidor: " + e.message }), { 
+      // Si falla, enviamos el error CON las cabeceras CORS
+      return new Response(JSON.stringify({ success: false, error: e.message }), { 
         status: 500, 
         headers: { ...corsHeaders, "content-type": "application/json" } 
       });
