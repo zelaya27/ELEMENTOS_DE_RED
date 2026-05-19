@@ -10,5 +10,12 @@
   },
   "compatibility_flags": [
     "nodejs_compat"
+  ],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "bd_usuarios",
+      "database_id": "bb5240b3-ce4f-47fd-ade8-8226695aa819"
+    }
   ]
 }
