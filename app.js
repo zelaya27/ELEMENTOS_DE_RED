@@ -25,4 +25,12 @@ async function validarLogin() {
     } catch (error) {
         mensaje.innerText = "Error de conexión con el servidor.";
     }
+    function togglePassword() {
+    const input = document.getElementById('contrasena');
+    if (input.type === "password") {
+        input.type = "text";
+    } else {
+        input.type = "password";
+    }
+}
 }
