@@ -2,35 +2,23 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Acceso al Sistema</title>
+    <title>Login - App Postes</title>
     <style>
         body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f4f4f4; margin: 0; }
-        .login-box { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); width: 320px; text-align: center; }
-        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
-        .password-wrapper { position: relative; }
-        .toggle-btn { position: absolute; right: 10px; top: 15px; cursor: pointer; background: none; border: none; font-size: 16px; }
-        button.login-btn { width: 100%; padding: 12px; background-color: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer; margin-top: 10px; }
-        #mensaje { margin-top: 15px; font-size: 14px; font-weight: bold; }
+        .box { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 300px; text-align: center; }
+        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
     </style>
 </head>
 <body>
-
-<div class="login-box">
-    <img src="https://raw.githubusercontent.com/zelaya27/ELEMENTOS_DE_RED/main/UTCD%20Vertical.png" style="width: 140px; height: auto; margin-bottom: 15px;" alt="Logo">
-    
-    <h2>Acceso Técnico</h2>
-    
-    <input type="text" id="usuario" placeholder="Usuario">
-    
-    <div class="password-wrapper">
+    <div class="box">
+        <img src="https://raw.githubusercontent.com/zelaya27/ELEMENTOS_DE_RED/main/UTCD%20Vertical.png" style="width: 120px;" alt="Logo">
+        <h2>Acceso Técnico</h2>
+        <input type="text" id="usuario" placeholder="Usuario">
         <input type="password" id="contrasena" placeholder="Contraseña">
-        <button class="toggle-btn" onclick="togglePassword()">👁️</button>
+        <button onclick="validarLogin()">Ingresar</button>
+        <p id="mensaje"></p>
     </div>
-    
-    <button class="login-btn" onclick="validarLogin()">Ingresar</button>
-    <p id="mensaje"></p>
-</div>
-
-<script src="app.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
