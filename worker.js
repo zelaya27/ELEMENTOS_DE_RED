@@ -26,4 +26,10 @@ export default {
       });
     }
   },
+// Dentro de tu worker.js
+console.log("Intentando loguear con:", usuario, contrasena);
+const { results } = await env.DB.prepare(
+  "SELECT * FROM bd_usuarios WHERE usuario = ? AND contrasena = ?"
+).bind(usuario, contrasena).all();
+console.log("Resultados de la BD:", results); // <--- ESTO ES LA CLAVE
 };
