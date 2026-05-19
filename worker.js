@@ -1,13 +1,14 @@
 export default {
   async fetch(request, env) {
-    // 1. Manejo de CORS (vital para que el navegador no bloquee la conexión)
+    // ESTA PARTE ES CRÍTICA PARA EL ERROR DE CONEXIÓN
     if (request.method === "OPTIONS") {
         return new Response(null, { headers: { 
             "Access-Control-Allow-Origin": "*", 
             "Access-Control-Allow-Methods": "POST, OPTIONS",
-            "Access-Control-Allow-Headers": "Content-Type"
+            "Access-Control-Allow-Headers": "*"
         }});
     }
+    // ... resto de tu código
 
     if (request.method !== "POST") return new Response("Solo POST", { status: 405 });
 
