@@ -2,23 +2,15 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - App de Redes</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="login-container">
-        <img src="UTCD Vertical.png" alt="Logo" class="logo">
         <h2>Acceso al Sistema</h2>
-        
-        <input type="text" id="usuario" placeholder="Usuario" required>
-        
-        <div class="input-group">
-            <input type="password" id="contrasena" placeholder="Contraseña" required>
-            <button type="button" id="togglePassword">👁️</button>
-        </div>
-        
-        <button onclick="validarLogin()" id="btnIngresar">Ingresar</button>
+        <input type="text" id="usuario" placeholder="Usuario">
+        <input type="password" id="contrasena" placeholder="Contraseña">
+        <button onclick="validarLogin()">Ingresar</button>
         <p id="mensaje"></p>
     </div>
     <script src="app.js"></script>
