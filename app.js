@@ -3,33 +3,39 @@ async function validarLogin() {
     const contrasena = document.getElementById('contrasena').value;
     const mensaje = document.getElementById('mensaje');
     
-    mensaje.innerText = "Conectando...";
+    // CAMBIA ESTO POR LA URL REAL DE TU WORKER
+    const URL_WORKER = "https://edr.zelayadk.workers.dev/";
 
-    // CAMBIA ESTO POR LA URL DE TU WORKER
-    const URL_WORKER = "TU_URL_AQUI"; 
+    console.log("Enviando petición a:", URL_WORKER);
 
     try {
         const respuesta = await fetch(URL_WORKER, {
             method: 'POST',
-            body: JSON.stringify({ usuario, contrasena }),
-            headers: { 'Content-Type': 'application/json' }
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ usuario, contrasena })
         });
 
-        // Revisamos si la respuesta es exitosa
-        if (!respuesta.ok) throw new Error("Error en el servidor");
+        console.log("Respuesta recibida, status:", respuesta.status);
+
+        if (!respuesta.ok) {
+            throw new Error(`HTTP error! status: ${respuesta.status}`);
+        }
 
         const datos = await respuesta.json();
-        
+        console.log("Datos del servidor:", datos);
+
         if (datos.success) {
-            mensaje.innerText = "¡Bienvenido!";
+            mensaje.innerText = "¡Acceso concedido!";
             mensaje.style.color = "green";
         } else {
-            mensaje.innerText = "Usuario incorrecto.";
+            mensaje.innerText = "Usuario/Contraseña incorrectos.";
             mensaje.style.color = "red";
         }
     } catch (e) {
-        console.error(e);
-        mensaje.innerText = "Error de conexión. Revisa consola (F12).";
+        console.error("Error detectado:", e);
+        mensaje.innerText = "Error: " + e.message;
         mensaje.style.color = "red";
     }
 }
+
+
