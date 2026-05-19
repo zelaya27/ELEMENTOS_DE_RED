@@ -14,10 +14,13 @@
     <div class="login-box">
         <img src="https://raw.githubusercontent.com/zelaya27/ELEMENTOS_DE_RED/main/UTCD%20Vertical.png" style="width: 150px; height: auto;" alt="Logo">
         <h2>Iniciar Sesión</h2>
-        <input type="text" id="usuario" placeholder="Usuario">
-        <input type="password" id="contrasena" placeholder="Contraseña">
+<div style="position: relative;">
+    <input type="password" id="contrasena" placeholder="Contraseña">
+    <button type="button" onclick="togglePassword()" style="width: auto; position: absolute; right: 5px; top: 5px; padding: 5px; background: none; color: #666; border: none; cursor: pointer; font-size: 12px;">👁️</button>
+</div>
         <button onclick="validarLogin()">Entrar</button>
         <p id="mensaje"></p>
+        
     </div>
     <script src="app.js"></script>
 </body>
