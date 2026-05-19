@@ -6,12 +6,22 @@ export default {
       "Access-Control-Allow-Headers": "Content-Type",
     };
 
+    // 1. Respuesta a OPTIONS (necesario para navegadores)
     if (request.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
+    // 2. NUEVA VALIDACIÓN: Si no es POST, no intentamos leer JSON
+    if (request.method !== "POST") {
+      return new Response(JSON.stringify({ 
+        message: "Servidor activo. El login requiere una petición POST." 
+      }), { 
+        headers: { ...corsHeaders, "content-type": "application/json" } 
+      });
+    }
+
+    // 3. Lógica principal (solo se ejecuta si es POST)
     try {
       const { usuario, contrasena } = await request.json();
 
-      // ESTA ES LA LÍNEA QUE FALLA SI EL BINDING 'DB' NO ESTÁ CONFIGURADO
       const { results } = await env.DB.prepare(
         "SELECT * FROM bd_usuarios WHERE usuario = ? AND contrasena = ?"
       )
@@ -21,7 +31,7 @@ export default {
       if (results && results.length > 0) {
         return new Response(JSON.stringify({ success: true }), { headers: { ...corsHeaders, "content-type": "application/json" } });
       } else {
-        return new Response(JSON.stringify({ success: false, error: "Usuario no encontrado" }), { headers: { ...corsHeaders, "content-type": "application/json" } });
+        return new Response(JSON.stringify({ success: false, error: "Usuario o contraseña incorrectos" }), { headers: { ...corsHeaders, "content-type": "application/json" } });
       }
     } catch (e) {
       return new Response(JSON.stringify({ success: false, error: "Error de Servidor: " + e.message }), { 
