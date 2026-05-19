@@ -1,9 +1,4 @@
-name = "app-reporte-postes"
-main = "worker.js"
-compatibility_date = "2024-05-19"
-
 [[d1_databases]]
 binding = "DB"
 database_name = "usuarios"
-# Cambia este ID por el tuyo de Cloudflare D1
 database_id = "b14f9001-69b9-4a89-a0b8-c063ce3abe17"
