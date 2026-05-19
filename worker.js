@@ -20,11 +20,14 @@ export default {
     try {
       const { usuario, contrasena } = await request.json();
 
-      const { results } = await env.DB.prepare(
-        "SELECT * FROM bd_usuarios WHERE usuario = ? AND contrasena = ?"
-      )
-      .bind(usuario, contrasena)
-      .all();
+    
+
+        const { results } = await env.DB.prepare(
+  "SELECT * FROM bd_usuarios WHERE usuario = ? AND contrasena = ?"
+)
+.bind(usuario, contrasena)
+.all();
+    
 
       if (results.length > 0) {
         return new Response(JSON.stringify({ success: true }), { headers: { ...corsHeaders, "content-type": "application/json" } });
