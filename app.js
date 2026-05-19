@@ -5,8 +5,8 @@ async function validarLogin() {
     
     mensaje.innerText = "Conectando...";
 
-    // REEMPLAZA ESTA URL CON LA URL QUE TE DA CLOUDFLARE AL DESPLEGAR
-    const URL_WORKER = "https://tu-worker.tu-cuenta.workers.dev";
+    // CAMBIA ESTO POR LA URL DE TU WORKER
+    const URL_WORKER = "TU_URL_AQUI"; 
 
     try {
         const respuesta = await fetch(URL_WORKER, {
@@ -14,16 +14,22 @@ async function validarLogin() {
             body: JSON.stringify({ usuario, contrasena }),
             headers: { 'Content-Type': 'application/json' }
         });
+
+        // Revisamos si la respuesta es exitosa
+        if (!respuesta.ok) throw new Error("Error en el servidor");
+
         const datos = await respuesta.json();
         
         if (datos.success) {
             mensaje.innerText = "¡Bienvenido!";
             mensaje.style.color = "green";
         } else {
-            mensaje.innerText = "Acceso denegado.";
+            mensaje.innerText = "Usuario incorrecto.";
             mensaje.style.color = "red";
         }
     } catch (e) {
-        mensaje.innerText = "Error de conexión.";
+        console.error(e);
+        mensaje.innerText = "Error de conexión. Revisa consola (F12).";
+        mensaje.style.color = "red";
     }
 }
