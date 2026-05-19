@@ -1,10 +1,19 @@
-async function validarLogin() {
-    const usuario = document.getElementById('usuario').value;
-    const contrasena = document.getElementById('contrasena').value;
-    const mensaje = document.getElementById('mensaje');
+// Función para mostrar/ocultar contraseña
+function togglePassword() {
+    const input = document.getElementById('contrasena');
+    input.type = (input.type === "password") ? "text" : "password";
+}
 
-    // Cambia esta URL por la URL de tu Cloudflare Worker real
-    const URL_WORKER = "https://api-poda.proyectos-jdop.workers.dev"; 
+// Función de Login que habla con Cloudflare
+async function validarLogin() {
+    const usuario = document.getElementById('usuario').value.trim();
+    const contrasena = document.getElementById('contrasena').value.trim();
+    const mensaje = document.getElementById('mensaje');
+    
+    mensaje.innerText = "Conectando...";
+    
+    // --- IMPORTANTE: Aquí debes poner la URL de tu Cloudflare Worker ---
+    const URL_WORKER = "https://tu-worker.tu-dominio.workers.dev"; 
 
     try {
         const respuesta = await fetch(URL_WORKER, {
@@ -16,21 +25,15 @@ async function validarLogin() {
         const datos = await respuesta.json();
 
         if (datos.success) {
+            mensaje.style.color = "green";
             mensaje.innerText = "¡Bienvenido!";
-            // Aquí puedes redirigir a la pantalla del mapa
-            window.location.href = "mapa.html"; 
+            window.location.href = "mapa.html"; // Redirigir a tu mapa
         } else {
+            mensaje.style.color = "red";
             mensaje.innerText = "Usuario o contraseña incorrectos.";
         }
-    } catch (error) {
-        mensaje.innerText = "Error de conexión con el servidor.";
+    } catch (e) {
+        mensaje.style.color = "red";
+        mensaje.innerText = "Error de conexión al servidor.";
     }
-    function togglePassword() {
-    const input = document.getElementById('contrasena');
-    if (input.type === "password") {
-        input.type = "text";
-    } else {
-        input.type = "password";
-    }
-}
 }
