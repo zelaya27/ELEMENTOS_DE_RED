@@ -31,8 +31,17 @@ export default {
       } else {
         return new Response(JSON.stringify({ success: false, message: "Usuario no encontrado" }), { status: 401, headers: { ...corsHeaders, "content-type": "application/json" } });
       }
+    } 
     } catch (e) {
-      return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: { ...corsHeaders, "content-type": "application/json" } });
+      // ESTO TE DIRÁ EL ERROR REAL
+      return new Response(JSON.stringify({ 
+        success: false, 
+        error: e.message, 
+        stack: e.stack 
+      }), { 
+        status: 500, 
+        headers: { "content-type": "application/json", "Access-Control-Allow-Origin": "*" } 
+      });
     }
   },
 };
