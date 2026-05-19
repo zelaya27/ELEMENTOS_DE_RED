@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Test de Conexión EDR</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; padding: 40px; background: #f4f4f9; }
+        .box { border: 1px solid #ccc; padding: 20px; border-radius: 8px; width: 320px; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        input { width: 100%; margin: 10px 0; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        button:hover { background: #0056b3; }
+        #debug { margin-top: 20px; padding: 10px; background: #eee; font-size: 12px; word-break: break-all; border: 1px solid #ddd; min-height: 50px; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h3>Test de Conexión</h3>
+        <label>URL del Worker:</label>
+        <input type="text" id="workerUrl" value="https://edr.zelayadk.workers.dev/">
+        <label>Usuario:</label>
+        <input type="text" id="usuario" value="admin">
+        <label>Contraseña:</label>
+        <input type="password" id="contrasena" value="1234">
+        <button onclick="probarConexion()">Ingresar</button>
+        <div id="debug">Esperando...</div>
+    </div>
+
+    <script>
+        async function probarConexion() {
+            const url = document.getElementById('workerUrl').value;
+            const usuario = document.getElementById('usuario').value;
+            const contrasena = document.getElementById('contrasena').value;
+            const debug = document.getElementById('debug');
+
+            debug.innerText = "Conectando al Worker...";
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ usuario, contrasena })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    debug.innerText = "ÉXITO: " + JSON.stringify(data);
+                } else {
+                    debug.innerText = "ERROR HTTP: " + response.status + " - " + response.statusText;
+                }
+            } catch (error) {
+                debug.innerText = "ERROR DE CONEXIÓN: " + error.message + ". Esto suele ser un problema de CORS (tu navegador bloquea la petición).";
+            }
+        }
+    </script>
+</body>
+</html>
