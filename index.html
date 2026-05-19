@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Acceso al Sistema - EDR</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .login-card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 320px; text-align: center; }
+        .logo { width: 150px; margin-bottom: 20px; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #0056b3; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        button:hover { background: #004494; }
+        #mensaje { margin-top: 15px; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <img src="UTCD Vertical.png" alt="Logo" class="logo">
+        <h2>Bienvenido</h2>
+        <input type="text" id="usuario" placeholder="Usuario">
+        <input type="password" id="contrasena" placeholder="Contraseña">
+        <button onclick="validarLogin()">Ingresar</button>
+        <p id="mensaje"></p>
+    </div>
+
+    <script>
+        async function validarLogin() {
+            const u = document.getElementById('usuario').value;
+            const p = document.getElementById('contrasena').value;
+            const m = document.getElementById('mensaje');
+            m.innerText = "Conectando...";
+            m.style.color = "black";
+
+            try {
+                // LLAMADA DIRECTA AL WORKER
+                const res = await fetch("https://edr.zelayadk.workers.dev/", {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ usuario: u, contrasena: p })
+                });
+                
+                const data = await res.json();
+                if (data.success) {
+                    m.innerText = "¡Acceso concedido!";
+                    m.style.color = "green";
+                } else {
+                    m.innerText = data.error;
+                    m.style.color = "red";
+                }
+            } catch(e) {
+                m.innerText = "Error: No se pudo conectar al servidor.";
+                m.style.color = "red";
+            }
+        }
+    </script>
+</body>
+</html>
