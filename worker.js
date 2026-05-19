@@ -1,35 +1,33 @@
 export default {
   async fetch(request, env) {
-    // Configuración para permitir conexiones desde tu web (CORS)
+    // Configuración para permitir que tu web hable con el worker
     if (request.method === "OPTIONS") {
-        return new Response(null, { headers: { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "POST" } });
+        return new Response(null, { headers: { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Headers": "*" } });
     }
 
-    const datos = await request.json();
-    const { usuario, contrasena } = datos;
+    const { usuario, contrasena } = await request.json();
 
     // Consultamos la base de datos de forma segura
-    const { results } = await env.DB.prepare(
-      "SELECT * FROM bd_usuarios WHERE usuario = ? AND contrasena = ?"
-    )
-    .bind(usuario, contrasena)
-    .all();
+    // env.DB es el puente configurado en tu wrangler.toml
+    try {
+        const { results } = await env.DB.prepare(
+          "SELECT * FROM bd_usuarios WHERE usuario = ? AND contrasena = ?"
+        )
+        .bind(usuario, contrasena)
+        .all();
 
-    if (results.length > 0) {
-      return new Response(JSON.stringify({ success: true, tipo: results[0].tipo_usuario }), {
-        headers: { "content-type": "application/json", "Access-Control-Allow-Origin": "*" }
-      });
-    } else {
-      return new Response(JSON.stringify({ success: false }), { 
-        status: 401,
-        headers: { "content-type": "application/json", "Access-Control-Allow-Origin": "*" }
-      });
+        if (results.length > 0) {
+          return new Response(JSON.stringify({ success: true }), {
+            headers: { "content-type": "application/json", "Access-Control-Allow-Origin": "*" }
+          });
+        } else {
+          return new Response(JSON.stringify({ success: false }), { 
+            status: 401,
+            headers: { "content-type": "application/json", "Access-Control-Allow-Origin": "*" }
+          });
+        }
+    } catch (error) {
+        return new Response(JSON.stringify({ success: false, error: error.message }), { status: 500 });
     }
   },
-// Dentro de tu worker.js
-console.log("Intentando loguear con:", usuario, contrasena);
-const { results } = await env.DB.prepare(
-  "SELECT * FROM bd_usuarios WHERE usuario = ? AND contrasena = ?"
-).bind(usuario, contrasena).all();
-console.log("Resultados de la BD:", results); // <--- ESTO ES LA CLAVE
 };
