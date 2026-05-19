@@ -1,24 +1,27 @@
 export default {
   async fetch(request, env) {
-    // Definimos las reglas de "permiso"
+    // 1. Definimos las cabeceras de CORS estrictas
     const corsHeaders = {
-      "Access-Control-Allow-Origin": "*", // Esto abre la puerta a todos
+      "Access-Control-Allow-Origin": "*", // Permite peticiones desde cualquier origen
       "Access-Control-Allow-Methods": "POST, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type",
+      "Access-Control-Allow-Headers": "Content-Type, Authorization",
     };
 
-    // 1. Responder a la pregunta de seguridad del navegador
+    // 2. RESPUESTA AL SALUDO (Preflight OPTIONS request)
+    // El navegador pide permiso antes de enviar los datos reales.
     if (request.method === "OPTIONS") {
-      return new Response(null, { headers: corsHeaders });
+      return new Response(null, { 
+        status: 204, // 204 significa "Todo bien, no hay contenido que devolver"
+        headers: corsHeaders 
+      });
     }
 
-    // 2. Intentar procesar el login
+    // 3. PROCESAMIENTO DE DATOS (POST request)
     try {
-      // Si no es POST, no permitimos la entrada
       if (request.method !== "POST") {
         return new Response(JSON.stringify({ error: "Solo permitimos POST" }), { 
           status: 405, 
-          headers: { ...corsHeaders } 
+          headers: { ...corsHeaders, "Content-Type": "application/json" } 
         });
       }
 
@@ -32,18 +35,17 @@ export default {
 
       if (results && results.length > 0) {
         return new Response(JSON.stringify({ success: true }), { 
-          headers: { ...corsHeaders, "content-type": "application/json" } 
+          headers: { ...corsHeaders, "Content-Type": "application/json" } 
         });
       } else {
-        return new Response(JSON.stringify({ success: false, error: "Usuario o contraseña incorrectos" }), { 
-          headers: { ...corsHeaders, "content-type": "application/json" } 
+        return new Response(JSON.stringify({ success: false, error: "Usuario incorrecto" }), { 
+          headers: { ...corsHeaders, "Content-Type": "application/json" } 
         });
       }
     } catch (e) {
-      // Si falla, enviamos el error CON las cabeceras CORS
       return new Response(JSON.stringify({ success: false, error: e.message }), { 
         status: 500, 
-        headers: { ...corsHeaders, "content-type": "application/json" } 
+        headers: { ...corsHeaders, "Content-Type": "application/json" } 
       });
     }
   },
