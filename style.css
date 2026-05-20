@@ -1,0 +1,154 @@
+/* Reseteo y fuente base */
+* {
+    box-sizing: border-box;
+}
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #e9ecef;
+    height: 100%;
+}
+
+/* --- DISEÑO DEL LOGIN --- */
+#login-container {
+    max-width: 380px;
+    margin: 80px auto;
+    padding: 40px 30px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.logo-container img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+h2 {
+    color: #333;
+    margin-bottom: 25px;
+    font-size: 22px;
+}
+
+/* Inputs con íconos */
+.input-group {
+    position: relative;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    background: #f8f9fa;
+    transition: border-color 0.3s;
+}
+
+.input-group:focus-within {
+    border-color: #0056b3;
+}
+
+.input-group .icon {
+    padding: 12px 15px;
+    color: #6c757d;
+}
+
+.input-group input {
+    flex: 1;
+    padding: 12px 10px 12px 0;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    background: transparent;
+    color: #495057;
+}
+
+/* Botón de ojito para la contraseña */
+#togglePassword {
+    padding: 12px 15px;
+    color: #6c757d;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+#togglePassword:hover {
+    color: #0056b3;
+}
+
+/* Botón Entrar */
+button[type="submit"] {
+    width: 100%;
+    padding: 14px;
+    background: #0056b3;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+    margin-top: 10px;
+}
+
+button[type="submit"]:hover {
+    background: #004494;
+}
+
+button[type="submit"]:disabled {
+    background: #80aadb;
+    cursor: not-allowed;
+}
+
+/* Mensaje de error */
+#login-error {
+    color: #dc3545;
+    margin-top: 15px;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+/* --- DISEÑO DE LA APP (MAPA) --- */
+#app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+#header {
+    background: #004494;
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    z-index: 1000;
+}
+
+#header h2 {
+    margin: 0;
+    font-size: 18px;
+    color: white;
+}
+
+#header button {
+    padding: 8px 15px;
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+#header button:hover {
+    background: #c82333;
+}
+
+#map {
+    flex-grow: 1;
+    width: 100%;
+}
