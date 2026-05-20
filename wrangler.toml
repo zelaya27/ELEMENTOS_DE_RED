@@ -1,4 +1,4 @@
-name = "ELEMENTOS_DE_RED"
+name = "edr"
 main = "./functions/api/login.js"
 compatibility_date = "2025-05-20"
 
