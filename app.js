@@ -1,71 +1,84 @@
-// --- Lógica para mostrar/ocultar contraseña ---
-const togglePassword = document.getElementById('togglePassword');
-const passwordInput = document.getElementById('password');
+document.addEventListener('DOMContentLoaded', () => {
+    
+    // --- Lógica para mostrar/ocultar contraseña ---
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('password');
 
-if (togglePassword && passwordInput) {
-    togglePassword.addEventListener('click', function () {
-        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-        passwordInput.setAttribute('type', type);
-        this.classList.toggle('fa-eye');
-        this.classList.toggle('fa-eye-slash');
-    });
-}
-
-// --- Manejo del envío del formulario Login ---
-document.getElementById('login-form').addEventListener('submit', async (e) => {
-    e.preventDefault(); 
-
-    const usuario = document.getElementById('usuario').value;
-    const password = passwordInput.value;
-    const errorMsg = document.getElementById('login-error');
-    const submitBtn = document.getElementById('btn-submit');
-
-    submitBtn.innerText = "Verificando...";
-    submitBtn.disabled = true;
-
-    try {
-        console.log("Intentando conectar con:", 'https://edr.zelayadk.workers.dev/api/login');
-
-        // IMPORTANTE: Asegúrate de usar la URL completa de tu Worker aquí
-        const response = await fetch('https://edr.zelayadk.workers.dev/api/login', {
-            method: 'POST',
-            headers: { 
-                'Content-Type': 'application/json' 
-            },
-            body: JSON.stringify({ usuario, password })
+    if (togglePassword && passwordInput) {
+        togglePassword.addEventListener('click', function () {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
         });
+    }
 
-        console.log("Respuesta del servidor:", response.status);
+    // --- Manejo del envío del formulario Login ---
+    const loginForm = document.getElementById('login-form');
+    if (loginForm) {
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault(); 
 
-        if (response.ok) {
-            // LOGIN CORRECTO
-            document.getElementById('login-container').style.display = 'none';
-            document.getElementById('app-container').style.display = 'flex';
-            errorMsg.style.display = 'none';
-            inicializarMapa();
-        } else {
-            // LOGIN INCORRECTO
-            errorMsg.innerText = "Usuario o contraseña incorrectos";
-            errorMsg.style.display = 'block';
-        }
-    } catch (error) {
-        console.error("Error crítico en la conexión:", error);
-        errorMsg.innerText = "Error de conexión. Revisa la consola (F12).";
-        errorMsg.style.display = 'block';
-    } finally {
-        submitBtn.innerText = "Entrar";
-        submitBtn.disabled = false;
+            const usuario = document.getElementById('usuario').value;
+            const password = passwordInput.value;
+            const errorMsg = document.getElementById('login-error');
+            const submitBtn = document.getElementById('btn-submit');
+
+            submitBtn.innerText = "Verificando...";
+            submitBtn.disabled = true;
+
+            try {
+                // LLAMADA RELATIVA (La solución al error 404)
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ usuario, password })
+                });
+
+                if (response.ok) {
+                    // LOGIN CORRECTO
+                    document.getElementById('login-container').style.display = 'none';
+                    document.getElementById('app-container').style.display = 'flex';
+                    errorMsg.style.display = 'none';
+                    inicializarMapa();
+                } else {
+                    // LOGIN INCORRECTO
+                    errorMsg.innerText = "Usuario o contraseña incorrectos";
+                    errorMsg.style.display = 'block';
+                }
+            } catch (error) {
+                console.error("Error crítico en la conexión:", error);
+                errorMsg.innerText = "Error de conexión. Revisa la consola.";
+                errorMsg.style.display = 'block';
+            } finally {
+                submitBtn.innerText = "Entrar";
+                submitBtn.disabled = false;
+            }
+        });
+    }
+
+    // --- Botón de Cerrar Sesión ---
+    const btnLogout = document.getElementById('btn-logout');
+    if (btnLogout) {
+        btnLogout.addEventListener('click', () => {
+            document.getElementById('app-container').style.display = 'none';
+            document.getElementById('login-container').style.display = 'block';
+            document.getElementById('usuario').value = '';
+            passwordInput.value = '';
+            passwordInput.setAttribute('type', 'password');
+        });
     }
 });
 
-// --- Botón de Cerrar Sesión ---
-document.getElementById('btn-logout').addEventListener('click', () => {
-    document.getElementById('app-container').style.display = 'none';
-    document.getElementById('login-container').style.display = 'block';
-    document.getElementById('usuario').value = '';
-    passwordInput.value = '';
-    passwordInput.setAttribute('type', 'password');
-});
+// --- Función para consultar cualquier tabla desde el Frontend ---
+async function queryDB(table, query, params = []) {
+    const response = await fetch('/api/db', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ table, query, params })
+    });
+    return await response.json();
+}
 
 // --- Lógica del Mapa Base (Leaflet + Esri) ---
 let map;
@@ -87,20 +100,11 @@ function inicializarMapa() {
         L.marker(e.latlng).addTo(map)
             .bindPopup("Tu ubicación").openPopup();
     });
-    // Función para consultar cualquier tabla desde el Frontend
-async function queryDB(table, query, params = []) {
-  const response = await fetch('/api/db', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ table, query, params })
-  });
-  return await response.json();
 }
 
 // Ejemplo: Consultar circuitos de un sector al cargar el mapa
 async function cargarCircuitos(sectorUsuario) {
-  const data = await queryDB('circuitos', 'SELECT * FROM circuitos WHERE sector = ?', [sectorUsuario]);
-  console.log("Circuitos cargados:", data);
-  // Aquí pintas los circuitos en el mapa
-}
+    const data = await queryDB('circuitos', 'SELECT * FROM circuitos WHERE sector = ?', [sectorUsuario]);
+    console.log("Circuitos cargados:", data);
+    // Aquí pintas los circuitos en el mapa
 }
