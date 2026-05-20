@@ -4,7 +4,7 @@ export async function onRequestPost(context) {
     
     // Consulta la base de datos D1
     const stmt = context.env.DB.prepare(
-      "SELECT * FROM bd_usuarios WHERE usuario = ? AND contraseña = ?"
+      "SELECT * FROM bd_usuarios WHERE usuario = ? AND contrasena = ?"
     );
     const user = await stmt.bind(usuario, contraseña).first();
 
