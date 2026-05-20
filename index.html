@@ -3,55 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acceso al Sistema - Reporte</title>
-    <style>
-        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f4f4f9; margin: 0; }
-        .login-card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 300px; text-align: center; }
-        img { width: 100px; margin-bottom: 20px; }
-        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        .password-container { position: relative; }
-        .toggle-btn { position: absolute; right: 10px; top: 20px; cursor: pointer; font-size: 12px; color: #666; }
-        button { width: 100%; padding: 10px; background-color: #0056b3; color: white; border: none; border-radius: 4px; cursor: pointer; }
-        button:hover { background-color: #004494; }
-    </style>
+    <title>App Reporte de Postes - EDR</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="login-card">
-        <img src="https://raw.githubusercontent.com/zelaya27/ELEMENTOS_DE_RED/main/UTCD%20Vertical.png" alt="Logo">
-        <input type="text" id="usuario" placeholder="Usuario">
-        <div class="password-container">
-            <input type="password" id="password" placeholder="Contraseña">
-            <span class="toggle-btn" onclick="togglePass()">👁</span>
+
+    <div id="login-container">
+        <div class="logo-container">
+            <img src="https://via.placeholder.com/200x80?text=LOGO+EMPRESA" alt="Logo de la Empresa" id="logo">
         </div>
-        <button onclick="login()">Ingresar</button>
+        
+        <h2>Iniciar Sesión</h2>
+        
+        <form id="login-form">
+            <div class="input-group">
+                <i class="fas fa-user icon"></i>
+                <input type="text" id="usuario" placeholder="Usuario" required autocomplete="username">
+            </div>
+            
+            <div class="input-group">
+                <i class="fas fa-lock icon"></i>
+                <input type="password" id="password" placeholder="Contraseña" required autocomplete="current-password">
+                <i class="fas fa-eye" id="togglePassword" title="Mostrar/Ocultar contraseña"></i>
+            </div>
+
+            <button type="submit" id="btn-submit">Entrar</button>
+            <p id="login-error" style="display: none;">Credenciales incorrectas</p>
+        </form>
     </div>
 
-    <script>
-        function togglePass() {
-            const p = document.getElementById('password');
-            p.type = (p.type === 'password') ? 'text' : 'password';
-        }
+    <div id="app-container" style="display: none;">
+        <div id="header">
+            <h2>Reporte de Postes</h2>
+            <button id="btn-logout"><i class="fas fa-sign-out-alt"></i> Salir</button>
+        </div>
+        <div id="map"></div>
+    </div>
 
-        async function login() {
-            const userVal = document.getElementById('usuario').value;
-            const passVal = document.getElementById('password').value;
-
-            // Enviamos los datos al backend (functions/api/login.js)
-            const res = await fetch('/api/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ usuario: userVal, password: passVal })
-            });
-
-            const data = await res.json();
-            
-            if (res.ok) {
-                alert("Bienvenido, " + (data.nombre || userVal));
-                window.location.href = "/mapa.html"; 
-            } else {
-                alert("Error: " + (data.error || "Credenciales incorrectas"));
-            }
-        }
-    </script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
