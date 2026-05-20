@@ -6,13 +6,19 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="login-box">
-        <img src="UTCD Vertical.png" alt="Logo" class="logo">
-        <input type="text" id="usuario" placeholder="Usuario">
+   <div class="login-box">
+    <img src="UTCD Vertical.png" alt="Logo" class="logo">
+    
+    <input type="text" id="usuario" placeholder="Usuario">
+    
+    <div class="password-container">
         <input type="password" id="contrasena" placeholder="Contraseña">
-        <button onclick="validarLogin()">Ingresar</button>
-        <p id="mensaje"></p>
+        <button type="button" id="btn-ojo" onclick="togglePassword()">👁️ Ver</button>
     </div>
+    
+    <button class="btn-ingresar" onclick="validarLogin()">Ingresar</button>
+    <p id="mensaje"></p>
+</div>
     <script src="app.js"></script>
 </body>
 </html>
