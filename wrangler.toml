@@ -1,8 +1,8 @@
-name = "edr" 
-main = "index.js" # Asegúrate de que tu archivo de código se llame index.js
+name = "edr"
 compatibility_date = "2026-05-20"
+pages_build_output_dir = "."
 
 [[d1_databases]]
-binding = "DB" # Este es el nombre que usarás en tu código (env.DB)
+binding = "DB"
 database_name = "usuarios"
 database_id = "756b056d-dfa5-46f9-9a3f-9282e0e1105b"
