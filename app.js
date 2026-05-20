@@ -5,7 +5,7 @@
  */
 
 // URL de tu Cloudflare Worker (Base de datos y API)
-const URL_WORKER = "https://edr.zelayadk.workers.dev/login";
+const URL_WORKER = "https://edr.zelayadk.workers.dev";
 
 /**
  * Valida las credenciales del usuario comunicándose con el Cloudflare Worker.
