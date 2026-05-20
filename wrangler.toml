@@ -1,8 +1,0 @@
-name = "edr"
-main = "./functions/api/login.js"
-compatibility_date = "2025-05-20"
-
-[[d1_databases]]
-binding = "DB"
-database_name = "usuarios"
-database_id = "756b056d-dfa5-46f9-9a3f-9282e0e1105b"
