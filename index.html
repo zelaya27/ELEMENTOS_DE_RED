@@ -1,53 +1,27 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reporte de Postes - ENEE</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <style>
-        body { font-family: sans-serif; margin: 0; padding: 10px; background-color: #f4f4f9; }
-        #map { height: 300px; width: 100%; border-radius: 8px; margin-bottom: 15px; }
-        .container { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        h2 { color: #2c3e50; text-align: center; }
-        input, button { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; }
-        button { background-color: #27ae60; color: white; border: none; font-weight: bold; cursor: pointer; }
-        button:hover { background-color: #219150; }
-    </style>
-</head>
-<body>
+<input type="text" id="user" placeholder="Nombre de usuario">
+<input type="password" id="pass" placeholder="Contraseña">
+<button onclick="validarLogin()">Entrar</button>
 
-<div class="container">
-    <h2>Reportar Poste Dañado</h2>
-    <div id="map"></div>
-    <input type="text" id="ubicacion" placeholder="Coordenadas automáticas" readonly>
-    <button onclick="tomarReporte()">Enviar Reporte</button>
-</div>
-
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-    // Inicialización del mapa
-    var map = L.map('map').setView([14.65, -86.65], 13); // Coordenadas Juticalpa inicial
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap'
-    }).addTo(map);
+async function validarLogin() {
+    const usuario = document.getElementById('user').value;
+    const password = document.getElementById('pass').value;
 
-    var marker = L.marker([14.65, -86.65], {draggable:true}).addTo(map);
+    const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ usuario, password })
+    });
 
-    // Obtener geolocalización
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-            var lat = position.coords.latitude;
-            var lng = position.coords.longitude;
-            map.setView([lat, lng], 16);
-            marker.setLatLng([lat, lng]);
-            document.getElementById('ubicacion').value = lat + ", " + lng;
-        });
+    const data = await response.json();
+
+    if (data.success) {
+        // Ocultar login, mostrar app
+        document.getElementById('login-section').style.display = 'none';
+        document.getElementById('app').style.display = 'block';
+        inicializarMapa(); 
+    } else {
+        alert(data.message);
     }
-
-    function tomarReporte() {
-        alert("Reporte enviado exitosamente (Simulado). Coordenadas: " + document.getElementById('ubicacion').value);
-    }
+}
 </script>
-</body>
-</html>
