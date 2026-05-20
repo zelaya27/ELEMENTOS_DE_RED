@@ -1,8 +1,6 @@
-name = "edr"
+name = "mi-login-app"
 main = "src/index.js"
-compatibility_date = "2024-05-19"
+compatibility_date = "2026-05-19"
 
-[[d1_databases]]
-binding = "DB"
-database_name = "bd_usuarios"
-database_id = "bb5240b3-ce4f-47fd-ade8-8226695aa819"
+[assets]
+directory = "./public"
