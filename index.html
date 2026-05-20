@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso al Sistema - Reporte</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f4f4f9; margin: 0; }
+        .login-card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 300px; text-align: center; }
+        img { width: 100px; margin-bottom: 20px; }
+        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        .password-container { position: relative; }
+        .toggle-btn { position: absolute; right: 10px; top: 20px; cursor: pointer; font-size: 12px; color: #666; }
+        button { width: 100%; padding: 10px; background-color: #0056b3; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background-color: #004494; }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <img src="https://raw.githubusercontent.com/zelaya27/ELEMENTOS_DE_RED/main/UTCD%20Vertical.png" alt="Logo">
+        <input type="text" id="usuario" placeholder="Usuario">
+        <div class="password-container">
+            <input type="password" id="password" placeholder="Contraseña">
+            <span class="toggle-btn" onclick="togglePass()">👁</span>
+        </div>
+        <button onclick="login()">Ingresar</button>
+    </div>
+
+    <script>
+        function togglePass() {
+            const p = document.getElementById('password');
+            p.type = (p.type === 'password') ? 'text' : 'password';
+        }
+
+        async function login() {
+            const usuario = document.getElementById('usuario').value;
+            const password = document.getElementById('password').value;
+
+            const res = await fetch('/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ usuario, password })
+            });
+
+            const data = await res.json();
+            if (res.status === 200) {
+                alert("Bienvenido, " + data.nombre);
+                window.location.href = "/mapa.html"; // O tu página principal
+            } else {
+                alert("Error: " + data.error);
+            }
+        }
+    </script>
+</body>
+</html>
