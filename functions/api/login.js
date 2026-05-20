@@ -9,7 +9,6 @@ export async function onRequestPost(context) {
     "Access-Control-Allow-Headers": "Content-Type",
   };
 
-  // Manejo de pre-flight (CORS)
   if (request.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
@@ -17,8 +16,8 @@ export async function onRequestPost(context) {
   try {
     const { usuario, password } = await request.json();
     
-    // Consulta a la base de datos D1
-    const stmt = env.DB.prepare("SELECT * FROM usuarios WHERE usuario = ? AND password = ?");
+    // Consulta a tu base de datos D1
+    const stmt = env.DB.prepare("SELECT * FROM bd_usuarios WHERE usuario = ? AND password = ?");
     const user = await stmt.bind(usuario, password).first();
 
     if (user) {
