@@ -87,4 +87,20 @@ function inicializarMapa() {
         L.marker(e.latlng).addTo(map)
             .bindPopup("Tu ubicación").openPopup();
     });
+    // Función para consultar cualquier tabla desde el Frontend
+async function queryDB(table, query, params = []) {
+  const response = await fetch('/api/db', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ table, query, params })
+  });
+  return await response.json();
+}
+
+// Ejemplo: Consultar circuitos de un sector al cargar el mapa
+async function cargarCircuitos(sectorUsuario) {
+  const data = await queryDB('circuitos', 'SELECT * FROM circuitos WHERE sector = ?', [sectorUsuario]);
+  console.log("Circuitos cargados:", data);
+  // Aquí pintas los circuitos en el mapa
+}
 }
