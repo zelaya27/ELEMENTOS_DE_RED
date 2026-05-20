@@ -1,12 +1,12 @@
 export async function onRequestPost(context) {
   try {
-    const { usuario, contraseña } = await context.request.json();
+    const { usuario, contrasena } = await context.request.json();
     
     // Consulta la base de datos D1
     const stmt = context.env.DB.prepare(
       "SELECT * FROM bd_usuarios WHERE usuario = ? AND contrasena = ?"
     );
-    const user = await stmt.bind(usuario, contraseña).first();
+    const user = await stmt.bind(usuario, contrasena).first();
 
     if (user) {
       return new Response(JSON.stringify({ success: true }), {
